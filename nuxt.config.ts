@@ -1,27 +1,36 @@
-import fs from 'node:fs'
+import fs from "node:fs";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
-const prefix = process.env.NUXT_APP_BASE_URL || ''
-let defaultLocale = 'zh'
-const locales = []
-if (fs.existsSync('./content/zh')) {
-  locales.push({ code: 'zh', file: 'zh.json', name: '中文' })
+const prefix = process.env.NUXT_APP_BASE_URL || "";
+let defaultLocale = "zh";
+const locales = [];
+if (fs.existsSync("./content/zh")) {
+  locales.push({ code: "zh", file: "zh.json", name: "中文" });
 }
-if (fs.existsSync('./content/en')) {
-  locales.push({ code: 'en', file: 'en.json', name: 'English' })
-  defaultLocale = 'en'
+if (fs.existsSync("./content/en")) {
+  locales.push({ code: "en", file: "en.json", name: "English" });
+  defaultLocale = "en";
 }
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  devServer: {
+    host: "0.0.0.0",
+  },
   router: {
     options: {
       strict: true,
     },
   },
   ssr: false,
-  css: ['primeicons/primeicons.css', '~/assets/styles/default.scss'],
-  modules: ['@nuxt/content', '@primevue/nuxt-module', '@nuxtjs/color-mode', '@nuxtjs/i18n'],
+  css: ["primeicons/primeicons.css", "~/assets/styles/default.scss"],
+  modules: [
+    "@nuxt/content",
+    "@primevue/nuxt-module",
+    "@nuxtjs/color-mode",
+    "@nuxtjs/i18n",
+    "@nuxt/image",
+  ],
   runtimeConfig: {
     public: {
       NUXT_APP_BASE_URL: prefix,
@@ -43,7 +52,7 @@ export default defineNuxtConfig({
   content: {
     markdown: {
       tags: {
-        img: 'Image',
+        img: "Image",
       },
     },
     documentDriven: {
@@ -51,35 +60,54 @@ export default defineNuxtConfig({
       injectPage: false,
     },
     experimental: {
-      clientDB: process.env.NODE_ENV === 'development' ? false : true,
+      clientDB: process.env.NODE_ENV === "development" ? false : true,
       search: {
         indexed: true,
       },
     },
     highlight: {
-      theme: 'github-dark',
-      langs: ['json', 'js', 'ts', 'html', 'vue', 'shell', 'md', 'yaml', 'java', 'kt', 'sql'],
+      theme: "github-dark",
+      langs: [
+        "json",
+        "js",
+        "ts",
+        "html",
+        "vue",
+        "shell",
+        "md",
+        "yaml",
+        "java",
+        "kt",
+        "sql",
+      ],
     },
   },
   i18n: {
-    langDir: 'locales/',
+    langDir: "locales/",
     defaultLocale,
     locales,
-    strategy: 'prefix',
+    strategy: "prefix",
   },
   colorMode: {
-    preference: 'system',
-    fallback: 'light',
+    preference: "system",
+    fallback: "light",
   },
   primevue: {
     components: {
-      exclude: '*',
+      exclude: "*",
     },
   },
   vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: "modern-compiler",
+        },
+      },
+    },
     esbuild: {
-      drop: ['console', 'debugger'],
+      drop: ["console", "debugger"],
     },
   },
-  compatibilityDate: '2024-08-19',
-})
+  compatibilityDate: "2024-10-04",
+});
